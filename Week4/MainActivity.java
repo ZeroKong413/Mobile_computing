@@ -2,7 +2,7 @@ package com.example.zxcv1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.opengl.Matrix;
+import android.graphics.Matrix;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.CheckBox;
@@ -13,7 +13,7 @@ import android.widget.RadioGroup;
 public class MainActivity extends AppCompatActivity {
     CheckBox check1, check2;
 
-    RadioGroup bGroup1, bGroup2;
+    RadioGroup bGroup1, bGroup2, cGroup1;
 
     ImageView imageView1;
 
@@ -24,22 +24,26 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         check1 = (CheckBox) findViewById(R.id.checkBox1);
         check2 = (CheckBox) findViewById(R.id.checkBox2);
 
         imageView1 = (ImageView) findViewById(R.id.imageView);
-        imageView1.setScaleType(ImageView.ScaleType.FIT_CENTER);
-
+//        imageView1.setScaleType(ImageView.ScaleType.FIT_CENTER);
 
         bGroup1 = (RadioGroup) findViewById(R.id.bgroup1);
         bGroup2 = (RadioGroup) findViewById(R.id.bgroup2);
+        cGroup1 = (RadioGroup) findViewById(R.id.cgroup1);
         check1.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     check2.setChecked(false);
+                    bGroup1.clearCheck();
+                    imageView1.setImageResource(0);
                     bGroup1.setVisibility(View.VISIBLE); // 남자 그룹 체크 시 남자 라디오 그룹 표시
                     bGroup2.setVisibility(View.GONE); // 여자 그룹 체크 시 여자 라디오 그룹 숨김
+
                 }
             }
         });
@@ -48,8 +52,11 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     check1.setChecked(false);
+                    bGroup2.clearCheck();
+                    imageView1.setImageResource(0);
                     bGroup2.setVisibility(View.VISIBLE);
                     bGroup1.setVisibility(View.GONE);
+
                 }
             }
         });
@@ -69,6 +76,51 @@ public class MainActivity extends AppCompatActivity {
                 else {
                     mStr.append("미연 selected!");
                     imageView1.setImageResource(R.drawable.mi);
+                }
+
+            }
+        });
+        bGroup2.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                StringBuilder mStr = new StringBuilder();
+
+
+                if(checkedId == R.id.bb1){
+                    mStr.append("원우 selected!");
+                    imageView1.setImageResource(R.drawable.won);
+                }
+                else if(checkedId == R.id.bb2){
+                    mStr.append("정한 selected!");
+                    imageView1.setImageResource(R.drawable.jeong);
+                }
+                else {
+                    mStr.append("호시 selected!");
+                    imageView1.setImageResource(R.drawable.ho);
+                }
+            }
+//            imageMain.setScaleType(ImageView.ScaleType.MATRIX);
+//            Matrix matrix = imageMain.getImageMatrix();
+//            matrix.setScale(2.0f, 2.0f); // 2배 스케일로 설정
+//            imageMain.setImageMatrix(matrix);
+        });
+        cGroup1.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                matrix = new Matrix();
+                if(checkedId == R.id.c1){
+                    imageView1.setScaleType(ImageView.ScaleType.FIT_CENTER);
+                }
+                else if(checkedId == R.id.c2){
+                    matrix.postScale(2f,2f);
+                    imageView1.setScaleType(ImageView.ScaleType.MATRIX);
+                    imageView1.setImageMatrix(matrix);// 왜 안되니
+                }
+                else if(checkedId == R.id.c3){
+                    imageView1.setScaleType(ImageView.ScaleType.FIT_XY);
+                }
+                else{
+                    imageView1.setScaleType(ImageView.ScaleType.CENTER);
                 }
 
             }
